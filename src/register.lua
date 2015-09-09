@@ -7,6 +7,11 @@ local register = {}
 
 function register.route(arg1, arg2, method)
   if arg1 == "register" then
+    arg2 = string.match(arg2,'^[%w+%.%-_]+@[%w+%.%-_]+%.%a%a+$')
+    if not arg2 then
+      ngx.say("invalid email address")
+      return true
+    end
     register.create(arg2)
     return true
   else
@@ -34,23 +39,18 @@ function register.init()
   end
 end
 
-function register._create(emailaddr)
-  local red_client = register.init()
-  local ok
-  local random_hex = resty_string.to_hex(random.bytes(6))
-  local email_available, err = red_client:setnx ("register:" .. emailaddr, random_hex)
-  if email_available == 1 then
-    ok, err = red_client:set ("uid:" .. random_hex, emailaddr)
-  end
-  
-  return email_available == 1, random_hex, err
-end
-
 register.create = function(emailaddr)
-  local success, key, err = register._create(emailaddr)
-  if not success then
+  local ok, err, red_client, key, email_available
+  red_client = register.init()
+  key = resty_string.to_hex(random.bytes(6))
+  email_available, err = red_client:setnx ("register:" .. emailaddr, key)
+  if email_available == 1 then
+    ok, err = red_client:set ("uid:" .. key, emailaddr)
+  else
     return register.error_user_exists()
   end
+  
+  red_client:rpush("emailqueue", string.format("%s %s", key, emailaddr))
   ngx.say(string.format(
 [[Done! Your key is: %s
 
