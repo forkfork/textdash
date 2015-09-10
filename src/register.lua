@@ -58,7 +58,7 @@ We've also emailed you that key. Circulate as needed.
 
 Next step: start writing logs to a dashboard:
 
-curl -X POST -d "Server load: 50%%" https://textdash.xyz/%s/myamazingapp
+curl -4 -X POST -d "Server load: 50%%" https://textdash.xyz/%s/myamazingapp
 
 This will write to a dashboard 'myamazingapp' creating if needed. You can view at: https://textdash.xyz/%s/myamazingapp
 

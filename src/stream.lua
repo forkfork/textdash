@@ -15,7 +15,7 @@ function read.init()
   local ok, err
   local red_client
   red_client, err = redis:new()
-  red_client:set_timeout(1000 * 5)
+  red_client:set_timeout(1000 * 60 * 10)
   ok, err = red_client:connect("127.0.0.1", 6379)
   if not ok then
     ngx.err(ngx.ERR, string.format("failed to connect to redis: %s", err))
