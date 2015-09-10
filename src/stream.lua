@@ -59,8 +59,8 @@ function read.read(uid, did)
       else
         if err == "timeout" then
           log("TIMEOUT")
-          --ok, err = red_client:connect("127.0.0.1", 6379)
-          --red_client:subscribe(list_key)
+          ok, err = red_client:connect("127.0.0.1", 6379)
+          red_client:subscribe(list_key)
           break
         else
           log("OTHER ERROR")
