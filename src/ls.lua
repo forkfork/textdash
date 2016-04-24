@@ -29,7 +29,7 @@ function ls.ls(uid)
   list_key = "pages:" .. uid
   items, err = red_client:lrange(list_key, 0, -1)
   for _, item in ipairs(items) do
-    ngx.say("http://127.0.0.1:8080/" .. uid .. "/" .. item)
+    ngx.say("https://textdash.xyz/" .. uid .. "/" .. item)
   end
 end
 
