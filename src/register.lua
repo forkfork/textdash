@@ -1,18 +1,19 @@
-local redis = require "resty.redis"
-local random = require 'resty.random'
-local resty_string = require 'resty.string'
+local user = require("users.user")
 
 local register = {}
 
 
-function register.route(arg1, arg2, method)
+function register.route(redis, arg1, arg2, method)
   if arg1 == "register" then
     arg2 = string.match(arg2,'^[%w+%.%-_]+@[%w+%.%-_]+%.%a%a+$')
     if not arg2 then
       ngx.say("invalid email address")
       return true
     end
-    register.create(arg2)
+    local headers = ngx.req.get_headers()
+
+    user.register(redis, arg2, headers.org)
+
     return true
   else
     return false
@@ -24,37 +25,39 @@ register.error_args = function()
 end
 
 register.error_user_exists = function()
-  ngx.say[[that email address is unavailable]]
+  ngx.say[[that org name is unavailable]]
 end
 
-function register.init()
-  local red_client, err = redis:new()
-  red_client:set_timeout(1000)
-  local ok, err = red_client:connect("127.0.0.1", 6379)
-  if not ok then
-    ngx.err(ngx.ERR, string.format("failed to connect to redis: %s", err))
-    return nil
-  else
-    return red_client 
-  end
-end
+register.create = function(emailaddr, org)
+  local ok, err, red_client, key, org_available, password, password_blurb
+  local headers = ngx.req.get_headers()
 
-register.create = function(emailaddr)
-  local ok, err, red_client, key, email_available
   red_client = register.init()
-  key = resty_string.to_hex(random.bytes(6))
-  email_available, err = red_client:setnx ("register:" .. emailaddr, key)
-  if email_available == 1 then
-    ok, err = red_client:set ("uid:" .. key, emailaddr)
+  if headers.org then
+    key = tostring(headers.org)
+    password = resty_string.to_hex(random.bytes(20))
   else
-    return register.error_user_exists()
+    key = resty_string.to_hex(random.bytes(6))
+  end
+  if headers.org then
+    org_available, err = red_client:setnx ("register:" .. org, emailaddr)
+    if org_available == 1 then
+      ok, err = red_client:set ("uid:" .. key, emailaddr)
+      ok, err = red_client:set ("password:" .. key, password)
+    else
+      return register.error_user_exists()
+    end
+    password_blurb = ""
+  else
+    ok, err = red_client:set ("uid:" .. key, emailaddr)
+    password_blurb = ""
   end
   
   red_client:rpush("emailqueue", string.format("%s %s", key, emailaddr))
   ngx.say(string.format(
-[[Done! Your key is: %s
+[[Done! Your organisation name is: %s
 
-We've also emailed you that key. Circulate as needed.
+We've also emailed you that name. Circulate as needed.
 
 Next step: start writing logs to a dashboard:
 
@@ -62,7 +65,9 @@ curl -4 -X POST -d "Server load: 50%%" https://textdash.xyz/%s/myamazingapp
 
 This will write to a dashboard 'myamazingapp' creating if needed. You can view at: https://textdash.xyz/%s/myamazingapp
 
-View all your log dashboards at https://textdash.xyz/%s]], key, key, key, key))
+View all your log dashboards at https://textdash.xyz/%s
+
+%s]], key, key, key, key, password_blurb))
 
 end
 
