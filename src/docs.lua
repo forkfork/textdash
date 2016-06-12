@@ -1,9 +1,11 @@
+local landing = require("landing")
+
 local docs = {}
 
-function docs.route(arg1, arg2, method)
+function docs.route(redis, arg1, arg2, method)
   ngx.log(ngx.ERR, type(arg1))
   if not arg1 or (arg1 == "") or (arg1 == "docs") then
-    docs.docs()
+    ngx.say(landing)
     return true
   else
     return false
