@@ -47,7 +47,7 @@ register.create = function(emailaddr, org)
   local blurb = string.format(
 [[Account created named '%s', API key is '%s'
 
-View log dashboards with: curl -H "key: %s" http://textdash.xyz/%s]], org, password, password))
+View log dashboards with: curl -H "key: %s" http://textdash.xyz/%s]], org, password, password)
   red_client:rpush("emailqueue", string.format("%s\n%s", emailaddr, blurb))
   ngx.say(blurb)
 
