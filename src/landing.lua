@@ -1,4 +1,4 @@
-
+return [[
 <link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
 
 <style>
@@ -87,7 +87,7 @@ function register() {
   <td valign=middle>
   <span class=blurb><br>
 <font color=blue># first register an account</font><br>
-curl -H "org: mycompany" http:<a class="__cf_email__" href="/cdn-cgi/l/email-protection" data-cfemail="80afaff4e5f8f4e4e1f3e8aef8f9faaff2e5e7e9f3f4e5f2afede5c0edf9e3efedf0e1eef9aee3efed">[email&#160;protected]</a><script data-cfhash='f9e31' type="text/javascript">/* <![CDATA[ */!function(t,e,r,n,c,a,p){try{t=document.currentScript||function(){for(t=document.getElementsByTagName('script'),e=t.length;e--;)if(t[e].getAttribute('data-cfhash'))return t[e]}();if(t&&(c=t.previousSibling)){p=t.parentNode;if(a=c.getAttribute('data-cfemail')){for(e='',r='0x'+a.substr(0,2)|0,n=2;a.length-n;n+=2)e+='%'+('0'+('0x'+a.substr(n,2)^r).toString(16)).slice(-2);p.replaceChild(document.createTextNode(decodeURIComponent(e)),c)}p.removeChild(t)}}catch(u){}}()/* ]]> */</script><br>
+curl -H "org: mycompany" http://textdash.xyz/register/me@mycompany.com<br>
 <font color=green>account created, API key is 'b8e696f4bb'</font><br><br>
 <font color=blue># lets start logging</font><br>
 ssh appserver<br>
@@ -104,11 +104,9 @@ curl -H "key: b8e696f4bb" -H "accept: text/event-stream" http://textdash.xyz/myc
 <font color=green> 2016-07-02 20:52:39 This connection is held open<br><br> </font>
 
 <font color=blue># coming soon: HTTPS, log retention, remote log grepping</font><br><br>
-<font color=blue># contact: <a class="__cf_email__" href="/cdn-cgi/l/email-protection" data-cfemail="52263b3f3d263a2b363d253c2112353f333b3e7c313d3f">[email&#160;protected]</a><script data-cfhash='f9e31' type="text/javascript">/* <![CDATA[ */!function(t,e,r,n,c,a,p){try{t=document.currentScript||function(){for(t=document.getElementsByTagName('script'),e=t.length;e--;)if(t[e].getAttribute('data-cfhash'))return t[e]}();if(t&&(c=t.previousSibling)){p=t.parentNode;if(a=c.getAttribute('data-cfemail')){for(e='',r='0x'+a.substr(0,2)|0,n=2;a.length-n;n+=2)e+='%'+('0'+('0x'+a.substr(n,2)^r).toString(16)).slice(-2);p.replaceChild(document.createTextNode(decodeURIComponent(e)),c)}p.removeChild(t)}}catch(u){}}()/* ]]> */</script><br>
+<font color=blue># contact: timothydowns@gmail.com</font>
 <tr>
   <td>
 
 </table>
-</body>
-
-
+</body>]]
