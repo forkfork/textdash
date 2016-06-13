@@ -29,45 +29,27 @@ register.error_user_exists = function()
 end
 
 register.create = function(emailaddr, org)
-  local ok, err, red_client, key, org_available, password, password_blurb
-  local headers = ngx.req.get_headers()
+  local ok, err, red_client, org_available, password
 
   red_client = register.init()
-  if headers.org then
-    key = tostring(headers.org)
-    password = resty_string.to_hex(random.bytes(20))
-  else
-    key = resty_string.to_hex(random.bytes(6))
-  end
-  if headers.org then
-    org_available, err = red_client:setnx ("register:" .. org, emailaddr)
-    if org_available == 1 then
-      ok, err = red_client:set ("uid:" .. key, emailaddr)
-      ok, err = red_client:set ("password:" .. key, password)
-    else
-      return register.error_user_exists()
-    end
-    password_blurb = ""
-  else
-    ok, err = red_client:set ("uid:" .. key, emailaddr)
-    password_blurb = ""
-  end
   
-  red_client:rpush("emailqueue", string.format("%s %s", key, emailaddr))
-  ngx.say(string.format(
-[[Done! Your organisation name is: %s
+  if not org then
+    org = resty_string.to_hex(random.bytes(6))
+  end
+  password = resty_string.to_hex(random.bytes(20))
+  org_available, err = red_client:setnx ("register:" .. org, emailaddr)
+  if org_available == 1 then
+    ok, err = red_client:set ("uid:" .. key, emailaddr)
+    ok, err = red_client:set ("password:" .. key, password)
+  else
+    return register.error_user_exists()
+  end
+  local blurb = string.format(
+[[Account created named '%s', API key is '%s'
 
-We've also emailed you that name. Circulate as needed.
-
-Next step: start writing logs to a dashboard:
-
-curl -4 -X POST -d "Server load: 50%%" https://textdash.xyz/%s/myamazingapp
-
-This will write to a dashboard 'myamazingapp' creating if needed. You can view at: https://textdash.xyz/%s/myamazingapp
-
-View all your log dashboards at https://textdash.xyz/%s
-
-%s]], key, key, key, key, password_blurb))
+View log dashboards with: curl -H "key: %s" http://textdash.xyz/%s]], org, password, password))
+  red_client:rpush("emailqueue", string.format("%s\n%s", emailaddr, blurb))
+  ngx.say(blurb)
 
 end
 
