@@ -20,7 +20,12 @@ user.register = function(redis, email, orgname)
 
   redis:mset("pwd:" .. orgname, password,
              "accttype:" .. orgname, accttype)
-  
+  local blurb = string.format([[Account created named '%s', API key is '%s'
+
+View log dashboards with: curl -H "key: %s" http://textdash.xyz/%s]], orgname, password, password, orgname)
+  redis:rpush("emailqueue", string.format("%s\n%s", emailaddr, blurb))
+  ngx.say(blurb)
+
   return orgname, email, password, nil
 end
 
