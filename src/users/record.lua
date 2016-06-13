@@ -7,6 +7,7 @@ record.log = function(redis, orgname, dashboard, ln)
   user.ratelimit(redis, orgname)
 
   local len, err = redis:rpush("log:" .. orgname .. ":" .. dashboard, ln)
+  redis:publish("log:" .. orgname .. ":" .. dashboard, ln)
   if len == 1 then
     redis:rpush("pages:" .. orgname, dashboard)
   end
