@@ -24,8 +24,7 @@ end
 function tcpserver.connection(uid, did)
   local sock = assert(ngx.req.socket(true))
   local header = sock:receive()
-  local uid, did = string.match(header, "(%g*) (%g*)")
-  ngx.say("uid is " .. tostring(uid) .. " did is " .. tostring(did))
+  local uid, did, pwd = string.match(header, "(%g*) (%g*) (%g*)")
   if not uid or not did then
     ngx.eof()
     return
@@ -36,7 +35,7 @@ function tcpserver.connection(uid, did)
 
   local ln = sock:receive()
   while ln do
-    record.log(red_client, uid, did, ln)
+    record.log(red_client, uid, did, pwd, ln)
     ln = sock:receive()
   end
 end
