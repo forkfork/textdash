@@ -10,7 +10,9 @@ function write.route(redis, arg1, arg2, method)
   local request_password = headers['key']
   if arg1 and arg2 and (method == "POST" or method == "PUT") then
     if method == "PUT" then
-      record.clear(redis, arg1, arg2, request_password)
+      if not record.clear(redis, arg1, arg2, request_password) then
+        return false
+      end
     end
     ngx.req.read_body()
     local body_data = ngx.req.get_body_data()
