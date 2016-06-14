@@ -21,7 +21,7 @@ end
 
 -- TCP connection handler
 
-function tcpserver.connection(uid, did)
+function tcpserver.connection()
   local sock = assert(ngx.req.socket(true))
   sock:settimeout(1000 * 60 * 60 * 24)
   local header = sock:receive()
