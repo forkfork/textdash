@@ -103,8 +103,9 @@ cd /app/logs<br>
 curl -H "key: b8e696f4bb" -H "accept: text/event-stream" http://textdash.xyz/mycompany/myapi<br>
 <font color=green> 2016-07-02 20:52:39 This connection is held open<br><br> </font>
 
-<font color=blue># coming soon: HTTPS, log retention, remote log grepping</font><br>
-<font color=blue># this is currently on HTTP, so no CC data please</font><br><br>
+<font color=blue># - HTTP POST to a dashboard to append, PUT to a dashboard to set the whole dashboard</font><br>
+<font color=blue># - coming soon: HTTPS, log retention, remote log grepping</font><br>
+<font color=blue># - this is currently on HTTP, don't send super secret data</font><br><br>
 <font color=blue># contact: timothydowns@gmail.com</font>
 <tr>
   <td>
