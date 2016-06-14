@@ -21,6 +21,14 @@ record.log = function(redis, orgname, dashboard, password, ln)
   return orgname, email, nil
 end
 
+record.clear = function(redis, orgname, dashboard, password)
+  if not user.auth(redis, orgname, dashboard, password) then
+    return false
+  end
+  
+  redis:del("log:".. orgname .. ":" .. dashboard)
+  return true
+end
 
 local tests = [[
 local restyredis = require("resty.redis")
