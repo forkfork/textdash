@@ -8,7 +8,10 @@ function write.route(redis, arg1, arg2, method)
   -- arg2 is dashboard
   local headers = ngx.req.get_headers()
   local request_password = headers['key']
-  if arg1 and arg2 and method == "POST" then
+  if arg1 and arg2 and (method == "POST" or method == "PUT") then
+    if method == "PUT" then
+      record.clear(redis, arg1, arg2, request_password)
+    end
     ngx.req.read_body()
     local body_data = ngx.req.get_body_data()
     if type(body_data) == "string" and string.len(body_data) > 0 then
