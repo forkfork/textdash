@@ -92,7 +92,7 @@ curl -H "org: mycompany" http://textdash.xyz/register/me@mycompany.com<br>
 <font color=blue># lets start logging</font><br>
 ssh appserver<br>
 cd /app/logs<br>
-{ echo "mycompany myapi" ; tail -F app.log ; } | nc textdash.xyz 5052<br><br>
+{ echo "mycompany myapi b8e696f4bb" ; tail -F app.log ; } | nc textdash.xyz 5052<br><br>
 <span class=blurb>
 <font color=blue># look at the last 20 log lines</font><br>curl -H "key: b8e696f4bb" http://textdash.xyz/mycompany/myapi<br>
 <font color=green>
