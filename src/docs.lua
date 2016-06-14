@@ -3,7 +3,6 @@ local landing = require("landing")
 local docs = {}
 
 function docs.route(redis, arg1, arg2, method)
-  ngx.log(ngx.ERR, type(arg1))
   if not arg1 or (arg1 == "") or (arg1 == "docs") then
     ngx.say(landing)
     return true
