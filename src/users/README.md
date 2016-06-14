@@ -1,18 +1,20 @@
-An ORGNAME can be either a random hex code, or a proper name.
+The following shows Redis data structures for a simple transient unixy log agreggation tool.
 
-Redis Data Structures:
+This application allows to register a user, give the user a passsword and an account type, maintain a list of pages, with each page containing N lines.
 
-A user is represented by:
+A user is represented by the following structures:
 
 ```
 SETNX uid:ORGNAME EMAILADDR
 SET pwd:ORGNAME PASSWORD
-SET accttype:ORGNAME 
+SET accttype:ORGNAME lite
 ```
 
 A user has N dashboards. A dashboard looks like:
 
+```
 RPUSH pages:ORGNAME PAGENAME
+```
 
 Pages have N log entries, which look like:
 
@@ -28,16 +30,22 @@ RPUSH log:ORGNAME:PAGENAME LOG LINE 3
 RPOP log:ORGNAME:PAGENAME
 ```
 
-rate limiting
+*Rate limiting*
 
+On a rate limited request, first check whether we have exceeded the rate:
+
+```
 GET ratelimit:ORGNAME
+```
 
-if it doesnt exist, set:
+If it doesnt exist, set:
 
+```
 SET ratelimit:ORGNAME 1 EX 60
+```
 
-if it does exist
+If it does exist, increment it:
 
+```
 INCR ratelimit:ORGNAME 1
-
-if the INCR returns more than N, then indicate an error
+```
