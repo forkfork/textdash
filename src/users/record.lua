@@ -2,8 +2,11 @@ local user = require("users.user")
 
 local record = {}
 
-record.log = function(redis, orgname, dashboard, ln)
+record.log = function(redis, orgname, dashboard, password, ln)
 
+  if not user.auth(redis, orgname, dashboard, password) then
+    return nil, nil, "auth failure"
+  end
   user.ratelimit(redis, orgname)
 
   local len, err = redis:rpush("log:" .. orgname .. ":" .. dashboard, ln)
