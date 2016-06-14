@@ -80,7 +80,7 @@ function register() {
 <table align="center" style="margin: 0px auto;" width="80%">
 <tr>
   <td>
-<div class="fancy-line">Zero-Hassle Log Aggregation</div>
+<div class="fancy-line">Unixy Simple Log Aggregation</div>
 
 <tr valign=middle>
 
