@@ -8,7 +8,7 @@ local tcpserver = {}
 function tcpserver.init()
   local ok, err, red_client
   red_client, err = redis:new()
-  red_client:set_timeout(1000 * 5)
+  red_client:set_timeout(1000 * 60 * 60 * 24)
   ok, err = red_client:connect("127.0.0.1", 6379)
   if not ok then
     ngx.log(ngx.ERR, string.format("failed to connect to redis: %s", err))
@@ -23,6 +23,7 @@ end
 
 function tcpserver.connection(uid, did)
   local sock = assert(ngx.req.socket(true))
+  sock:settimeout(1000 * 60 * 60 * 24)
   local header = sock:receive()
   local uid, did, pwd = string.match(header, "(%g*) (%g*) (%g*)")
   if not uid or not did then
