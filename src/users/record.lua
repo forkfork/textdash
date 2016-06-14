@@ -5,7 +5,7 @@ local record = {}
 record.log = function(redis, orgname, dashboard, password, ln)
 
   if not user.auth(redis, orgname, dashboard, password) then
-    return nil, nil, "auth failure"
+    return false
   end
   user.ratelimit(redis, orgname)
 
@@ -18,7 +18,7 @@ record.log = function(redis, orgname, dashboard, password, ln)
     redis:lpop("log:" .. orgname .. ":" .. dashboard, ln)
   end
   
-  return orgname, email, nil
+  return true
 end
 
 record.clear = function(redis, orgname, dashboard, password)
